@@ -1,7 +1,7 @@
 name: Run Tests and Generate Allure Report
 
 on:
-  push:
+  push
     - cron: '50 22 * * *' # Запуск каждый день в 22:50
 
 jobs:
