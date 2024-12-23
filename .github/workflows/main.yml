@@ -25,6 +25,7 @@ jobs:
         continue-on-error: true
 
       - name: Генерация Allure отчета
+        uses: simple-elf/allure-report-action@master
         id: allure-report
         with:
           allure_results: target/allure-results
