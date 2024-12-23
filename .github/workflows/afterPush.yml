@@ -17,6 +17,11 @@ jobs:
           java-version: '8'
           distribution: 'temurin'
 
+      - name: Установка Allure CLI
+        run: |
+          curl -sL "https://github.com/allure-framework/allure2/releases/latest/download/allure-2.23.0.tgz" | tar -xz -C /opt/
+          echo "/opt/allure-2.23.0/bin" >> $GITHUB_PATH
+
       - name: Clean project
         run: mvn clean
 
