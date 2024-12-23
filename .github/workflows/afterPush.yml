@@ -24,17 +24,13 @@ jobs:
         continue-on-error: true
 
       - name: Генерация Allure отчета
-        id: allure-report
-        with:
-          allure_results: target/allure-results
-          gh_pages: gh-pages
-          allure_report: target/allure-report
-          allure_history: target/allure-history
+        run: |
+          allure generate target/allure-results -o target/allure-report
+          allure serve target/allure-results
 
       - name: Развертывание на GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./target/site/allure-maven-plugin
           publish_branch: gh-pages
