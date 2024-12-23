@@ -1,0 +1,41 @@
+name: Run Tests and Generate Allure Report
+
+on:
+  schedule:
+    - cron: '50 22 * * *' # Запуск каждый день в 22:50
+
+jobs:
+  Run_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Установка Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '1.8'
+
+      - name: Clean project
+        run: mvn clean
+
+      - name: Запуск тестов
+        run: mvn test
+        continue-on-error: true
+
+      - name: Генерация Allure отчета
+        id: allure-report
+        with:
+          allure_results: target/allure-results
+          gh_pages: gh-pages
+          allure_report: target/allure-report
+          allure_history: target/allure-history
+
+      - name: Развертывание на GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./target/site/allure-maven-plugin
+          publish_branch: gh-pages
