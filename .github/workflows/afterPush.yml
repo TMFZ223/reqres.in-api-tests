@@ -25,12 +25,11 @@ jobs:
           allure_results: ./allure-results
           gh_pages: gh-pages
           allure_report: ./allure-report
-          download_history: false
 
       - name: Развертывание на GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/site/allure-maven-plugin
+          publish_dir: ./site/allure-maven-plugin
           publish_branch: gh-pages
