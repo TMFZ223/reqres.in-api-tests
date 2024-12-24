@@ -23,11 +23,9 @@ jobs:
       # Шаг 3: Установка Allure CLI
       - name: Установка Allure CLI
         run: |
-          sudo apt-get update
-          sudo apt-get install -y unzip
           curl -sSL https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.zip -o allure.zip
-          unzip allure.zip -d /opt/
-          sudo ln -s /opt/allure-2.32.0/bin/allure /usr/bin/allure
+          unzip allure.zip
+          echo "$PWD/allure-2.32.0/bin" >> $GITHUB_PATH
           allure --version # Проверка установки
 
       # Шаг 4: Очистка проекта
