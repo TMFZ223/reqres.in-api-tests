@@ -111,7 +111,6 @@
                     <reportVersion>${allure.version}</reportVersion>
                     <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
                     <reportDirectory>${project.build.directory}/allure-report</reportDirectory>
-                    <historyDirectory>${project.build.directory}/allure-report/history</historyDirectory>
                 </configuration>
             </plugin>
         </plugins>
