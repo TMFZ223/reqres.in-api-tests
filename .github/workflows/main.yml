@@ -26,7 +26,6 @@ jobs:
           allure_results: ./allure-results
           gh_pages: gh-pages
           allure_report: ./allure-report
-          download_history: false
 
       - name: Развертывание на GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
