@@ -9,50 +9,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Шаг 1: Скачивание репозитория
-      - name: Check out code
+      - name: Используем maven репозиторий
         uses: actions/checkout@v3
 
-      # Шаг 2: Установка Java
-      - name: Установка Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '8'
-          distribution: 'temurin'
-
-      # Шаг 3: Установка Allure CLI
-      - name: Установка Allure CLI
-        run: |
-          curl -sSL https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.zip -o allure.zip
-          unzip allure.zip
-          echo "$PWD/allure-2.32.0/bin" >> $GITHUB_PATH
-          allure --version # Проверка установки
-
-      # Шаг 4: Очистка проекта
-      - name: Clean project
+      - name: Очистка проекта
         run: mvn clean
 
-      # Шаг 5: Запуск тестов
       - name: Запуск тестов
         run: mvn test
         continue-on-error: true
 
-      # Шаг 6: Генерация Allure отчета
       - name: Генерация Allure отчета
-        run: |
-          allure generate target/allure-results --clean -o target/allure-report
+        uses: simple-elf/allure-report-action@master
+        id: allure-report
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-history
 
-      # Шаг 7: Подготовка истории отчетов для Allure (если используется)
-      - name: Копирование истории отчетов (если есть)
-        run: |
-          if [ -d target/allure-history ]; then
-            cp -R target/allure-history target/allure-report/history || true
-          fi
-
-      # Шаг 8: Развертывание на GitHub Pages
       - name: Развертывание на GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./target/site/allure-maven-plugin
           publish_branch: gh-pages
-          publish_dir: target/allure-report
