@@ -8,14 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: Используем maven репозиторий
         uses: actions/checkout@v3
-
-      - name: Установка Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '8'
-          distribution: 'temurin'
 
       - name: Clean project
         run: mvn clean
@@ -25,13 +19,18 @@ jobs:
         continue-on-error: true
 
       - name: Генерация Allure отчета
-        run: |
-          allure generate target/allure-results -o target/allure-report
-          allure serve target/allure-results
+        uses: simple-elf/allure-report-action@master
+        id: allure-report
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-history
 
       - name: Развертывание на GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./target/site/allure-maven-plugin
           publish_branch: gh-pages
